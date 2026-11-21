@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#101b3a">
+<title>Hisense Dashboard</title>
+<style>
+:root{--bg:#101b3a;--panel:rgba(13,34,77,.82);--panel2:rgba(16,48,100,.88);--text:#f6f8ff;--muted:#c5d3ef;--accent:#8b78ff;--focus:#fff;--radius:20px}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101b3a;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{background:linear-gradient(115deg,rgba(9,22,56,.80),rgba(11,31,76,.38)),radial-gradient(ellipse at 78% 18%,#9c74d5 0,transparent 30%),linear-gradient(160deg,#174c9b 0%,#243e7d 42%,#111a36 100%);}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(4,12,30,.6)),radial-gradient(ellipse at 20% 100%,#5265a5 0,transparent 36%);pointer-events:none}
+.shell{position:relative;height:100%;padding:3.1vh 3.5vw;display:grid;grid-template-rows:auto auto auto 1fr;gap:2.2vh}
+.top{display:flex;align-items:center;justify-content:space-between}.greet{font-size:clamp(14px,1.25vw,22px);color:#d8e3ff}.name{font-size:clamp(28px,2.6vw,46px);font-weight:700;margin-top:4px}.topright{display:flex;gap:24px;align-items:center;font-size:clamp(17px,1.6vw,27px)}.weather-mini{color:#e5edff;font-size:clamp(13px,1.15vw,20px)}
+.section-title{font-size:clamp(17px,1.45vw,25px);font-weight:700;margin:0 0 1.1vh 2px}
+.row{display:grid;gap:1vw}.favorites{grid-template-columns:repeat(4,1fr)}.apps{grid-template-columns:repeat(6,1fr)}
+.tile{background:linear-gradient(135deg,rgba(47,93,177,.94),rgba(21,49,112,.94));border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:1.7vh 1.35vw;min-height:10.5vh;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 24px rgba(0,0,0,.12);outline:0;transition:transform .12s,border .12s}
+.tile .ico{font-size:clamp(23px,2.2vw,38px);line-height:1}.tile .label{font-size:clamp(15px,1.35vw,23px);font-weight:700}.tile .sub{font-size:clamp(11px,.95vw,16px);color:#d2def8;margin-top:4px}
+.tile:focus,.tile.selected{border:3px solid var(--focus);transform:scale(1.035);box-shadow:0 0 0 3px rgba(255,255,255,.16),0 12px 30px rgba(0,0,0,.25)}
+.fav:nth-child(1){background:linear-gradient(135deg,#6554d6,#44329b)}.fav:nth-child(2){background:linear-gradient(135deg,#1766b4,#173c80)}.fav:nth-child(3){background:linear-gradient(135deg,#0b9db2,#126b8b)}.fav:nth-child(4){background:linear-gradient(135deg,#bd427e,#87325f)}
+.apps .tile{min-height:8.8vh;align-items:flex-start}.apps .tile:nth-child(1){background:linear-gradient(135deg,#2868c8,#19418e)}.apps .tile:nth-child(2){background:linear-gradient(135deg,#c43c45,#8b2636)}.apps .tile:nth-child(3){background:linear-gradient(135deg,#d69a24,#a96a12)}.apps .tile:nth-child(4){background:linear-gradient(135deg,#29966d,#176548)}.apps .tile:nth-child(5){background:linear-gradient(135deg,#8651bf,#53348d)}.apps .tile:nth-child(6){background:linear-gradient(135deg,#258fa9,#17647d)}
+.widgets{display:grid;grid-template-columns:1.05fr 1fr 1fr 1fr;gap:1vw;min-height:0}.widget{background:var(--panel);border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);padding:1.7vh 1.35vw;min-height:15vh;backdrop-filter:blur(8px)}.wtitle{font-size:clamp(12px,1vw,17px);color:#d6e2ff;margin-bottom:1vh}.temp{font-size:clamp(35px,3.2vw,55px);font-weight:300;margin:.5vh 0}.desc{font-size:clamp(12px,1.05vw,18px);color:#e2eaff}.widget .big{font-size:clamp(23px,2vw,34px);font-weight:700}.weather-icon{float:right;font-size:clamp(30px,3vw,52px)}
+.footer{position:absolute;bottom:1.3vh;right:3.5vw;color:#c7d4f1;font-size:12px;opacity:.7}
+dialog{width:min(560px,88vw);border:1px solid rgba(255,255,255,.25);border-radius:18px;background:#142750;color:white;padding:24px;box-shadow:0 18px 60px #0009}dialog::backdrop{background:#030817bb}label{display:block;margin:15px 0 6px;color:#d9e4ff}input{width:100%;padding:13px;border-radius:10px;border:1px solid #8296c5;background:#0b1835;color:white;font-size:18px}button{border:0;border-radius:10px;padding:12px 18px;margin:16px 8px 0 0;background:#8b78ff;color:white;font-weight:bold;font-size:16px}button.secondary{background:#33466d}.hint{color:#bdcbed;font-size:13px;line-height:1.5}
+@media(max-width:900px){.shell{padding:2vh 2vw;gap:1.6vh}.favorites{grid-template-columns:repeat(2,1fr)}.apps{grid-template-columns:repeat(3,1fr)}.widgets{grid-template-columns:repeat(2,1fr);overflow:auto}.tile{min-height:9vh}.footer{display:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="top">
+ <div><div class="greet" id="greeting">Bonsoir</div><div class="name">Bienvenue</div></div>
+ <div class="topright"><span id="date">--</span><strong id="clock">--:--</strong><span class="weather-mini" id="topWeather">Météo à configurer</span><span tabindex="0" class="tile" style="min-height:0;padding:8px 12px;border-radius:12px" data-action="settings" aria-label="Paramètres">⚙</span></div>
+</header>
+<section><h2 class="section-title">Favoris</h2><div class="row favorites">
+ <div class="tile fav" tabindex="0" data-url="https://www.netflix.com/"><span class="ico">▣</span><div><div class="label">Continuer</div><div class="sub">Netflix · version web</div></div></div>
+ <div class="tile fav" tabindex="0" data-url="https://www.youtube.com/tv"><span class="ico">▶</span><div><div class="label">YouTube</div><div class="sub">Ouvrir le site web</div></div></div>
+ <div class="tile fav" tabindex="0" data-action="weather"><span class="ico">☼</span><div><div class="label">Météo</div><div class="sub">Prévisions locales</div></div></div>
+ <div class="tile fav" tabindex="0" data-action="settings"><span class="ico">⚙</span><div><div class="label">Personnaliser</div><div class="sub">Ville et préférences</div></div></div>
+</div></section>
+<section><h2 class="section-title">Applications & médias</h2><div class="row apps">
+ <div class="tile" tabindex="0" data-url="https://www.netflix.com/"><span class="ico">N</span><div class="label">Netflix</div></div>
+ <div class="tile" tabindex="0" data-url="https://www.youtube.com/tv"><span class="ico">▶</span><div class="label">YouTube</div></div>
+ <div class="tile" tabindex="0" data-url="https://www.primevideo.com/"><span class="ico">▶</span><div class="label">Prime Video</div></div>
+ <div class="tile" tabindex="0" data-url="https://www.disneyplus.com/"><span class="ico">✦</span><div class="label">Disney+</div></div>
+ <div class="tile" tabindex="0" data-action="jellyfin"><span class="ico">🎬</span><div class="label">Jellyfin</div></div>
+ <div class="tile" tabindex="0" data-action="settings"><span class="ico">＋</span><div class="label">Configurer</div></div>
+</div></section>
+<section style="min-height:0"><h2 class="section-title">Vos widgets</h2><div class="widgets">
+ <div class="widget" id="weatherCard"><div class="wtitle">Météo · ville à choisir</div><span class="weather-icon">☁</span><div class="temp">--°</div><div class="desc">Configurez votre ville dans ⚙</div><div class="desc" style="margin-top:8px">Prévisions indisponibles</div></div>
+ <div class="widget"><div class="wtitle">Date & heure</div><div class="big" id="clockLarge">--:--</div><div class="desc" id="dateLong">Chargement…</div><div class="desc" style="margin-top:8px">Horloge locale</div></div>
+ <div class="widget"><div class="wtitle">Médiathèque</div><div class="big">Jellyfin</div><div class="desc" id="jellyInfo">Adresse du serveur à configurer</div><div class="desc" style="margin-top:8px">Raccourci web facultatif</div></div>
+ <div class="widget"><div class="wtitle">Raccourcis</div><div class="big">HDMI · Apps</div><div class="desc">Les commandes natives VIDAA ne sont pas encore connectées</div><div class="desc" style="margin-top:8px">Version prototype</div></div>
+</div></section>
+<div class="footer">HISENSE DASHBOARD · prototype web réversible</div>
+</main>
+<dialog id="settings">
+ <h2>Personnaliser le tableau de bord</h2>
+ <p class="hint">La météo utilise Open-Meteo et nécessite une connexion Internet. La ville est enregistrée uniquement dans ce navigateur.</p>
+ <label for="city">Ville pour la météo</label><input id="city" placeholder="Ex. Rueil-Malmaison" autocomplete="off">
+ <label for="jelly">Adresse de ton serveur Jellyfin (facultatif)</label><input id="jelly" placeholder="http://192.168.1.20:8096">
+ <p class="hint">Les tuiles des services ouvrent leurs sites web. Elles ne lancent pas encore les applications natives VIDAA. HDMI et remplacement de HOME ne sont pas activés.</p>
+ <button id="save">Enregistrer</button><button class="secondary" id="close">Fermer</button>
+</dialog>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const store={get(k,d=''){try{return localStorage.getItem('hd_'+k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem('hd_'+k,v)}catch(e){}}};
+ function tick(){
+  const d=new Date(),h=d.getHours();
+  $('clock').textContent=d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  $('clockLarge').textContent=$('clock').textContent;
+  $('date').textContent=d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+  $('dateLong').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  $('greeting').textContent=h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir';
+ }
+ tick();setInterval(tick,15000);
+ function weatherCode(c){if(c===0)return ['Ensoleillé','☀'];if([1,2].includes(c))return ['Éclaircies','🌤'];if(c===3)return ['Nuageux','☁'];if([45,48].includes(c))return ['Brouillard','🌫'];if([51,53,55,61,63,65,80,81,82].includes(c))return ['Pluie','🌧'];if([71,73,75,77,85,86].includes(c))return ['Neige','❄'];if([95,96,99].includes(c))return ['Orage','⛈'];return ['Conditions actuelles','🌡'];}
+ async function loadWeather(){
+  const city=store.get('city');if(!city){$('topWeather').textContent='Ville à configurer';return}
+  $('weatherCard').querySelector('.wtitle').textContent='Météo · '+city;
+  try{
+   const g=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(city)+'&count=1&language=fr&format=json');
+   const gj=await g.json();if(!gj.results||!gj.results.length)throw Error('Ville introuvable');
+   const p=gj.results[0];
+   const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+p.latitude+'&longitude='+p.longitude+'&current=temperature_2m,apparent_temperature,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1');
+   const j=await r.json(),c=j.current,desc=weatherCode(c.weather_code);
+   $('weatherCard').querySelector('.weather-icon').textContent=desc[1];
+   $('weatherCard').querySelector('.temp').textContent=Math.round(c.temperature_2m)+'°';
+   $('weatherCard').querySelectorAll('.desc')[0].textContent=desc[0]+' · ressenti '+Math.round(c.apparent_temperature)+'°';
+   $('weatherCard').querySelectorAll('.desc')[1].textContent='Max '+Math.round(j.daily.temperature_2m_max[0])+'°  |  Min '+Math.round(j.daily.temperature_2m_min[0])+'°';
+   $('topWeather').textContent=city+' · '+Math.round(c.temperature_2m)+'°';
+  }catch(e){$('weatherCard').querySelectorAll('.desc')[0].textContent='Météo indisponible';$('topWeather').textContent='Météo indisponible';}
+ }
+ function openSettings(){$('city').value=store.get('city');$('jelly').value=store.get('jelly');$('settings').showModal()}
+ $('save').onclick=()=>{store.set('city',$('city').value.trim());store.set('jelly',$('jelly').value.trim());$('jellyInfo').textContent=store.get('jelly')||'Adresse du serveur à configurer';$('settings').close();loadWeather()};
+ $('close').onclick=()=>$('settings').close();
+ document.querySelectorAll('[data-action="settings"]').forEach(e=>e.addEventListener('click',openSettings));
+ document.querySelectorAll('[data-action="weather"]').forEach(e=>e.addEventListener('click',loadWeather));
+ document.querySelectorAll('[data-action="jellyfin"]').forEach(e=>e.addEventListener('click',()=>{const u=store.get('jelly');if(u)location.href=u;else openSettings()}));
+ document.querySelectorAll('[data-url]').forEach(e=>e.addEventListener('click',()=>{location.href=e.dataset.url}));
+ $('jellyInfo').textContent=store.get('jelly')||'Adresse du serveur à configurer';loadWeather();
+ // D-pad navigation: browser focus follows document order.
+ document.addEventListener('keydown',e=>{
+  const els=[...document.querySelectorAll('.tile[tabindex="0"]')];let i=els.indexOf(document.activeElement);
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();els[(i+1+els.length)%els.length].focus()}
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();els[(i-1+els.length)%els.length].focus()}
+  if(e.key==='Escape'||e.key==='Backspace'){if($('settings').open){$('settings').close();e.preventDefault()}}
+ });
+})();
+</script>
+</body></html>
